@@ -1,0 +1,182 @@
+[info] running (fork) Day17WindowFunctions 
+Picked up JAVA_TOOL_OPTIONS: --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+26/10/12 04:28:24 WARN Utils: Your hostname, LAPTOP-EGSE3CEJ resolves to a loopback address: 127.0.1.1; using 10.255.255.254 instead (on interface lo)
+26/10/12 04:28:24 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+26/10/12 04:28:25 INFO SparkContext: Running Spark version 3.5.9
+26/10/12 04:28:25 INFO SparkContext: OS info Linux, 6.18.33.2-microsoft-standard-WSL2, amd64
+26/10/12 04:28:25 INFO SparkContext: Java version 17.0.20
+26/10/12 04:28:25 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+26/10/12 04:28:25 INFO ResourceUtils: ==============================================================
+26/10/12 04:28:25 INFO ResourceUtils: No custom resources configured for spark.driver.
+26/10/12 04:28:25 INFO ResourceUtils: ==============================================================
+26/10/12 04:28:25 INFO SparkContext: Submitted application: Day17-Window-Functions
+26/10/12 04:28:25 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+26/10/12 04:28:25 INFO ResourceProfile: Limiting resource is cpu
+26/10/12 04:28:25 INFO ResourceProfileManager: Added ResourceProfile id: 0
+26/10/12 04:28:25 INFO SecurityManager: Changing view acls to: prabhat
+26/10/12 04:28:25 INFO SecurityManager: Changing modify acls to: prabhat
+26/10/12 04:28:25 INFO SecurityManager: Changing view acls groups to: 
+26/10/12 04:28:25 INFO SecurityManager: Changing modify acls groups to: 
+26/10/12 04:28:25 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: prabhat; groups with view permissions: EMPTY; users with modify permissions: prabhat; groups with modify permissions: EMPTY
+26/10/12 04:28:26 INFO Utils: Successfully started service 'sparkDriver' on port 39655.
+26/10/12 04:28:26 INFO SparkEnv: Registering MapOutputTracker
+26/10/12 04:28:26 INFO SparkEnv: Registering BlockManagerMaster
+26/10/12 04:28:26 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+26/10/12 04:28:26 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+26/10/12 04:28:26 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+26/10/12 04:28:26 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-4af20153-def0-4b9b-8a66-1fda189e8ee9
+26/10/12 04:28:26 INFO MemoryStore: MemoryStore started with capacity 988.8 MiB
+26/10/12 04:28:26 INFO SparkEnv: Registering OutputCommitCoordinator
+26/10/12 04:28:26 INFO JettyUtils: Start Jetty 0.0.0.0:4040 for SparkUI
+26/10/12 04:28:27 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+26/10/12 04:28:27 INFO Executor: Starting executor ID driver on host 10.255.255.254
+26/10/12 04:28:27 INFO Executor: OS info Linux, 6.18.33.2-microsoft-standard-WSL2, amd64
+26/10/12 04:28:27 INFO Executor: Java version 17.0.20
+26/10/12 04:28:27 INFO Executor: Starting executor with user classpath (userClassPathFirst = false): ''
+26/10/12 04:28:27 INFO Executor: Created or updated repl class loader org.apache.spark.util.MutableURLClassLoader@5a1c3cb4 for default.
+26/10/12 04:28:27 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 46395.
+26/10/12 04:28:27 INFO NettyBlockTransferService: Server created on 10.255.255.254:46395
+26/10/12 04:28:27 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+26/10/12 04:28:27 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 10.255.255.254, 46395, None)
+26/10/12 04:28:27 INFO BlockManagerMasterEndpoint: Registering block manager 10.255.255.254:46395 with 988.8 MiB RAM, BlockManagerId(driver, 10.255.255.254, 46395, None)
+26/10/12 04:28:27 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 10.255.255.254, 46395, None)
+26/10/12 04:28:27 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 10.255.255.254, 46395, None)
+========================================
+DAY 17 - SPARK WINDOW FUNCTIONS
+========================================
+
+===== ORIGINAL EMPLOYEE DATA =====
++-----------+-------------+--------+-------+
+|employee_id|employee_name|salary  |dept_id|
++-----------+-------------+--------+-------+
+|1          |Prabhat      |25000.0 |D01    |
+|2          |Rahul        |45000.0 |D02    |
+|3          |Amit         |75000.0 |D01    |
+|4          |Sneha        |120000.0|D03    |
+|5          |Priya        |60000.0 |D02    |
+|6          |Arjun        |28000.0 |D04    |
+|7          |Neha         |55000.0 |D02    |
+|8          |Karan        |95000.0 |D01    |
+|9          |Anjali       |35000.0 |D03    |
+|10         |Rohit        |85000.0 |D01    |
+|11         |Pooja        |150000.0|D04    |
+|12         |Vikram       |18000.0 |D05    |
+|13         |Manish       |55000.0 |D02    |
+|14         |Kavita       |68000.0 |D05    |
+|15         |Suresh       |50000.0 |D03    |
++-----------+-------------+--------+-------+
+
+
+===== ROW_NUMBER, RANK AND DENSE_RANK =====
++-------+-------------+--------+----------+-----------+----------+
+|dept_id|employee_name|salary  |row_number|salary_rank|dense_rank|
++-------+-------------+--------+----------+-----------+----------+
+|D01    |Karan        |95000.0 |1         |1          |1         |
+|D01    |Rohit        |85000.0 |2         |2          |2         |
+|D01    |Amit         |75000.0 |3         |3          |3         |
+|D01    |Prabhat      |25000.0 |4         |4          |4         |
+|D02    |Priya        |60000.0 |1         |1          |1         |
+|D02    |Manish       |55000.0 |3         |2          |2         |
+|D02    |Neha         |55000.0 |2         |2          |2         |
+|D02    |Rahul        |45000.0 |4         |4          |3         |
+|D03    |Sneha        |120000.0|1         |1          |1         |
+|D03    |Suresh       |50000.0 |2         |2          |2         |
+|D03    |Anjali       |35000.0 |3         |3          |3         |
+|D04    |Pooja        |150000.0|1         |1          |1         |
+|D04    |Arjun        |28000.0 |2         |2          |2         |
+|D05    |Kavita       |68000.0 |1         |1          |1         |
+|D05    |Vikram       |18000.0 |2         |2          |2         |
++-------+-------------+--------+----------+-----------+----------+
+
+
+===== HIGHEST-PAID EMPLOYEE IN EACH DEPARTMENT =====
++-------+-------------+--------+
+|dept_id|employee_name|salary  |
++-------+-------------+--------+
+|D01    |Karan        |95000.0 |
+|D02    |Priya        |60000.0 |
+|D03    |Sneha        |120000.0|
+|D04    |Pooja        |150000.0|
+|D05    |Kavita       |68000.0 |
++-------+-------------+--------+
+
+
+===== RUNNING SALARY TOTAL BY DEPARTMENT =====
++-------+-------------+--------+--------------------+
+|dept_id|employee_name|salary  |running_salary_total|
++-------+-------------+--------+--------------------+
+|D01    |Prabhat      |25000.0 |25000.0             |
+|D01    |Amit         |75000.0 |100000.0            |
+|D01    |Rohit        |85000.0 |185000.0            |
+|D01    |Karan        |95000.0 |280000.0            |
+|D02    |Rahul        |45000.0 |45000.0             |
+|D02    |Manish       |55000.0 |100000.0            |
+|D02    |Neha         |55000.0 |155000.0            |
+|D02    |Priya        |60000.0 |215000.0            |
+|D03    |Anjali       |35000.0 |35000.0             |
+|D03    |Suresh       |50000.0 |85000.0             |
+|D03    |Sneha        |120000.0|205000.0            |
+|D04    |Arjun        |28000.0 |28000.0             |
+|D04    |Pooja        |150000.0|178000.0            |
+|D05    |Vikram       |18000.0 |18000.0             |
+|D05    |Kavita       |68000.0 |86000.0             |
++-------+-------------+--------+--------------------+
+
+
+===== LAG AND LEAD SALARY COMPARISON =====
++-------+-------------+--------+---------------+-----------+
+|dept_id|employee_name|salary  |previous_salary|next_salary|
++-------+-------------+--------+---------------+-----------+
+|D01    |Prabhat      |25000.0 |NULL           |75000.0    |
+|D01    |Amit         |75000.0 |25000.0        |85000.0    |
+|D01    |Rohit        |85000.0 |75000.0        |95000.0    |
+|D01    |Karan        |95000.0 |85000.0        |NULL       |
+|D02    |Rahul        |45000.0 |NULL           |55000.0    |
+|D02    |Manish       |55000.0 |45000.0        |55000.0    |
+|D02    |Neha         |55000.0 |55000.0        |60000.0    |
+|D02    |Priya        |60000.0 |55000.0        |NULL       |
+|D03    |Anjali       |35000.0 |NULL           |50000.0    |
+|D03    |Suresh       |50000.0 |35000.0        |120000.0   |
+|D03    |Sneha        |120000.0|50000.0        |NULL       |
+|D04    |Arjun        |28000.0 |NULL           |150000.0   |
+|D04    |Pooja        |150000.0|28000.0        |NULL       |
+|D05    |Vikram       |18000.0 |NULL           |68000.0    |
+|D05    |Kavita       |68000.0 |18000.0        |NULL       |
++-------+-------------+--------+---------------+-----------+
+
+
+===== SALARY DIFFERENCE FROM PREVIOUS EMPLOYEE =====
++-------+-------------+--------+---------------+-----------------+
+|dept_id|employee_name|salary  |previous_salary|salary_difference|
++-------+-------------+--------+---------------+-----------------+
+|D01    |Prabhat      |25000.0 |NULL           |NULL             |
+|D01    |Amit         |75000.0 |25000.0        |50000.0          |
+|D01    |Rohit        |85000.0 |75000.0        |10000.0          |
+|D01    |Karan        |95000.0 |85000.0        |10000.0          |
+|D02    |Rahul        |45000.0 |NULL           |NULL             |
+|D02    |Manish       |55000.0 |45000.0        |10000.0          |
+|D02    |Neha         |55000.0 |55000.0        |0.0              |
+|D02    |Priya        |60000.0 |55000.0        |5000.0           |
+|D03    |Anjali       |35000.0 |NULL           |NULL             |
+|D03    |Suresh       |50000.0 |35000.0        |15000.0          |
+|D03    |Sneha        |120000.0|50000.0        |70000.0          |
+|D04    |Arjun        |28000.0 |NULL           |NULL             |
+|D04    |Pooja        |150000.0|28000.0        |122000.0         |
+|D05    |Vikram       |18000.0 |NULL           |NULL             |
+|D05    |Kavita       |68000.0 |18000.0        |50000.0          |
++-------+-------------+--------+---------------+-----------------+
+
+
+===== DAY 17 CONCEPTS =====
+row_number: Assigns a unique number to each row.
+rank: Assigns ranks and leaves gaps after ties.
+dense_rank: Assigns ranks without gaps after ties.
+partitionBy: Separates calculations by department.
+lag: Reads a value from the previous row.
+lead: Reads a value from the next row.
+Running total: Calculates cumulative salary.
+
+DAY 17 COMPLETED SUCCESSFULLY
+[success] elapsed time: 20 s
+[0J
